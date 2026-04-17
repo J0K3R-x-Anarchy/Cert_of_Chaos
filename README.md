@@ -70,18 +70,6 @@ CertOfChaos
 
 ---
 
-## ♣ Run from Source
-
-```bash
-git clone https://github.com/youruser/CertOfChaos
-cd CertOfChaos
-
-pip install cryptography
-python CertOfChaos.py
-```
-
----
-
 ## ♥ Features
 
 | | Feature | Description |
@@ -159,15 +147,6 @@ This project is strictly for:
 | `osslsigncode` | Authenticode signing engine |
 | `cryptography` | Certificate generation |
 | `tkinter` | GUI |
-
----
-
-## ♥ Build Binary
-
-```bash
-pip install pyinstaller cryptography
-pyinstaller --onefile --windowed --name CertOfChaos CertOfChaos.py
-```
 
 ---
 
