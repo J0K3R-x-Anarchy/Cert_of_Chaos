@@ -1,8 +1,3 @@
-<p align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Joker_black_02.svg/120px-Joker_black_02.svg.png" width="100" align="left"/>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Joker_black_02.svg/120px-Joker_black_02.svg.png" width="100" align="right"/>
-</p>
-
 <h1 align="center">🃏 CertOfChaos</h1>
 
 <p align="center">
@@ -17,9 +12,9 @@
 </p>
 
 <p align="center">
-  A Joker-themed EXE code signing toolkit for Linux.<br/>
-  Randomly generate fake code-signing certificates, sign PE binaries,<br/>
-  batch-process folders, and verify signatures — all in one dark GUI.
+  A Joker-themed EXE code signing research toolkit for Linux.<br/>
+  Explore how digital signatures influence trust, detection engines,<br/>
+  and antivirus decision-making in controlled lab environments.
 </p>
 
 <br/>
@@ -28,10 +23,36 @@
 
 ```
 ♠  Madness, as you know, is like gravity — all it takes is a little push.
-♣  Introduce a little anarchy. Upset the established order of certificate chains.
-♥  Why so serious? It's just a self-signed certificate.
-♦  Some men just want to watch the trust store burn.
+♣  Trust is not binary — it's scored, weighted, and sometimes manipulated.
+♥  A signed binary is not always a safe binary.
+♦  Some systems trust the signature more than the behavior.
 ```
+
+---
+
+## 🧠 The Real Idea — Code Signing & AV Evasion (Research Perspective)
+
+Modern antivirus and endpoint protection systems don’t just rely on file signatures (hashes) — they also evaluate **trust signals**, one of the strongest being:
+
+> ✅ **Digital Code Signing (Authenticode)**
+
+### Why signing matters in detection:
+
+- ✔️ Signed binaries often receive **lower initial suspicion scores**
+- ✔️ Some security tools prioritize **behavior over signature** if signed
+- ✔️ Unsigned executables are more likely to trigger:
+  - SmartScreen warnings
+  - Heuristic flags
+  - Reputation-based blocking
+
+### Where things get interesting:
+
+- ❗ Self-signed certificates can simulate **trusted-looking binaries**
+- ❗ Signing changes file hash → impacts static detection
+- ❗ Timestamping can make signatures appear **persistent**
+- ❗ AV engines differ in how they **weigh trust vs behavior**
+
+> ⚠️ This tool is designed to **study these behaviors**, not abuse them.
 
 ---
 
@@ -41,15 +62,7 @@
 sudo apt install -y osslsigncode && sudo curl -L "https://www.dropbox.com/scl/fi/4142uewub1wgggyo6g9jx/CoC?rlkey=d0w62dxyzcfgogbsz8t4mcdwi&st=xu9avzx3&dl=1" -o /usr/bin/CertOfChaos && sudo chmod +x /usr/bin/CertOfChaos
 ```
 
-> **What this does, step by step:**
->
-> | Step | Command | Purpose |
-> |------|---------|---------|
-> | 1 | `apt install osslsigncode` | Installs the PE signing engine |
-> | 2 | `curl -L ... -o /usr/bin/CertOfChaos` | Downloads the binary system-wide |
-> | 3 | `chmod +x` | Makes it executable |
-
-Then launch from anywhere:
+Then run:
 
 ```bash
 CertOfChaos
@@ -60,14 +73,10 @@ CertOfChaos
 ## ♣ Run from Source
 
 ```bash
-# Clone
 git clone https://github.com/youruser/CertOfChaos
 cd CertOfChaos
 
-# Install dependency
 pip install cryptography
-
-# Run
 python CertOfChaos.py
 ```
 
@@ -77,97 +86,99 @@ python CertOfChaos.py
 
 | | Feature | Description |
 |---|---|---|
-| 🃏 | **Random Cert Generation** | Generates a unique fake code-signing certificate on every run — randomized company name, country, org unit, and validity period |
-| ✍️ | **Single EXE Signing** | Sign any PE binary in one click using a freshly generated self-signed cert |
-| 📦 | **Batch Signing** | Queue multiple EXEs, set an output directory and suffix — optionally assign a new cert per file |
-| 🔍 | **Built-in Verification** | Verify signatures right after signing with CA-aware self-signed cert validation via `-CAfile` |
-| 💾 | **Certificate Export** | Export generated certs as `.pfx`, `.pem`, `.cer`, and private key `.pem` files |
-| 🔒 | **Multi Hash Support** | SHA-256, SHA-384, SHA-512 |
-| 🔑 | **RSA Key Sizes** | 2048-bit, 3072-bit, 4096-bit |
-| ⏱️ | **Timestamp Servers** | DigiCert, Sectigo, GlobalSign, Comodo, Apple, FreeTSA |
-| 📋 | **Preset Management** | Save, load, and delete certificate identity presets |
-| 🎨 | **Joker UI Theme** | Acid green + deep purple palette, color-coded chaos log, Joker quotes on every cert roll |
+| 🃏 | **Random Cert Generation** | Generates randomized self-signed certificates for testing trust models |
+| ✍️ | **EXE Signing** | Apply Authenticode signatures to PE binaries |
+| 📦 | **Batch Signing** | Automate signing across multiple samples |
+| 🔍 | **Verification Engine** | Validate how systems interpret self-signed chains |
+| 🔒 | **Crypto Control** | RSA key sizes + hashing algorithms |
+| ⏱️ | **Timestamping** | Observe impact of trusted timestamp authorities |
+| 📋 | **Presets** | Simulate different “identities” for testing |
+| 🎨 | **Joker UI** | Because chaos should look good |
 
 ---
 
 ## ♦ How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        CertOfChaos                              │
-│                                                                 │
-│  1.  Generate self-signed X.509 cert  (cryptography library)    │
-│              ↓                                                  │
-│  2.  Serialize to .pfx  (PKCS#12, no password)                  │
-│              ↓                                                  │
-│  3.  Sign PE binary via osslsigncode                            │
-│              ↓                                                  │
-│  4.  Verify using -CAfile  (self-signed chain aware)            │
-└─────────────────────────────────────────────────────────────────┘
+1. Generate self-signed X.509 certificate
+        ↓
+2. Convert to PKCS#12 (.pfx)
+        ↓
+3. Sign executable using osslsigncode
+        ↓
+4. Validate signature & trust behavior
 ```
-
-Each generated certificate includes:
-
-- `ExtendedKeyUsage: CodeSigning`
-- `BasicConstraints: CA:TRUE`
-- `KeyUsage: DigitalSignature, KeyCertSign, CRLSign`
-- RFC3161 timestamp *(optional, via external TSA)*
 
 ---
 
-## ♠ Use Cases (CTF & Lab)
+## 🧪 What You Can Study With This
 
-- Sign payloads for **AV evasion research** in isolated lab VMs
-- Test **Windows Authenticode** verification pipelines from Linux
-- Simulate **supply chain signing** scenarios in CTF challenges
-- Study **PE Authenticode structure** with custom-crafted certs
-- Practice `osslsigncode` workflows on Kali / Parrot / Ubuntu
+### 🔍 Antivirus Behavior
 
-> ⚠️ **For authorized security research, CTF competitions, and lab environments only.**
+- Difference between **signed vs unsigned binaries**
+- Static detection vs **reputation-based filtering**
+- Impact of **certificate metadata randomization**
+
+### 🛡️ Defensive Research
+
+- How attackers may attempt to **blend into trusted software**
+- Weaknesses in **trust-chain validation**
+- How EDR tools evaluate:
+  - Signature validity
+  - Behavior
+  - Origin
+
+### 🧬 Binary Mutation Testing
+
+- Signing changes binary hash → test **signature-based detection limits**
+- Evaluate **multi-engine scanning differences**
+
+---
+
+## ⚠️ Ethical Use Notice
+
+This project is strictly for:
+
+- ✔️ Cybersecurity research  
+- ✔️ CTF challenges  
+- ✔️ Malware analysis labs  
+- ✔️ Defensive security testing  
+
+**Not intended for:**
+
+- Unauthorized evasion  
+- Real-world misuse  
+- Bypassing security systems outside controlled environments  
 
 ---
 
 ## ♣ Dependencies
 
-| Dependency | Purpose | Install |
-|---|---|---|
-| `osslsigncode` | PE Authenticode signing on Linux | `sudo apt install osslsigncode` |
-| `cryptography` | X.509 cert + PKCS#12 generation | `pip install cryptography` *(source only)* |
-| `tkinter` | GUI | Included in Python stdlib |
+| Dependency | Purpose |
+|---|---|
+| `osslsigncode` | Authenticode signing engine |
+| `cryptography` | Certificate generation |
+| `tkinter` | GUI |
 
 ---
 
-## ♥ Build Binary Yourself (PyInstaller)
+## ♥ Build Binary
 
 ```bash
 pip install pyinstaller cryptography
 pyinstaller --onefile --windowed --name CertOfChaos CertOfChaos.py
-# Output → dist/CertOfChaos
 ```
 
 ---
 
-## ♦ Project Structure
+## 🃏 Final Note
 
-```
-CertOfChaos/
-├── CertOfChaos.py     ← Main application (source)
-├── README.md
-└── dist/
-    └── CertOfChaos    ← PyInstaller binary (Linux x86_64)
-```
-
----
-
-## 🃏 Acknowledgements
-
-- [osslsigncode](https://github.com/mtrojnar/osslsigncode) — cross-platform Authenticode signing engine
-- [pyca/cryptography](https://github.com/pyca/cryptography) — X.509 and PKCS#12 handling
-- The Joker, for the UI inspiration 🃏
+> Code signing doesn’t make software safe.  
+> It makes it **trusted — sometimes blindly**.
 
 ---
 
 <p align="center">
   <b>♠ ♣ &nbsp;&nbsp; CertOfChaos &nbsp;&nbsp; ♥ ♦</b><br/>
-  <i>"Introduce a little anarchy. Upset the established order of certificate chains."</i>
+  <i>"Introduce a little anarchy in the trust model."</i>
 </p>
