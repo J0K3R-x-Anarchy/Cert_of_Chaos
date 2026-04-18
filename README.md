@@ -128,13 +128,7 @@ CertOfChaos
 
 ### 🔍 What this demonstrates:
 
-- Signing may alter **initial detection ratios**
-- Some engines treat signed binaries with **different heuristics**
-- Detection is **not removed**, but may be **reweighted**
-- Highlights differences between **static reputation vs behavioral analysis**
-
-> ⚠️ Results vary across engines and over time — this is **not a bypass**, but a study of trust modeling.
-
+ Signing helps bypass AV detection as they just think its coming from a real organisation . Also we can spoof any organisation and show the Cert coming from that domain  
 
 ### 🧬 Binary Mutation Testing
 
