@@ -2,8 +2,6 @@
   <img src="assets/banner.png" width="100%"/>
 </p>
 
-<h1 align="center">🃏 CertOfChaos</h1>
-
 <p align="center">
   <i>"Why so serious about certificates?"</i>
 </p>
