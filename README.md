@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" width="100%"/>
+</p>
+
 <h1 align="center">🃏 CertOfChaos</h1>
 
 <p align="center">
@@ -21,7 +25,7 @@
 
 ---
 
-```
+```text
 ♠  Madness, as you know, is like gravity — all it takes is a little push.
 ♣  Trust is not binary — it's scored, weighted, and sometimes manipulated.
 ♥  A signed binary is not always a safe binary.
@@ -87,7 +91,7 @@ CertOfChaos
 
 ## ♦ How It Works
 
-```
+```text
 1. Generate self-signed X.509 certificate
         ↓
 2. Convert to PKCS#12 (.pfx)
