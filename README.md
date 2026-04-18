@@ -118,6 +118,24 @@ CertOfChaos
   - Behavior
   - Origin
 
+---
+
+## 🧪 VirusTotal Observation (Before vs After Signing)
+
+| Before Signing | After Signing |
+|---------------|--------------|
+| <img src="assets/vt_before.png" width="100%"> | <img src="assets/vt_after.png" width="100%"> |
+
+### 🔍 What this demonstrates:
+
+- Signing may alter **initial detection ratios**
+- Some engines treat signed binaries with **different heuristics**
+- Detection is **not removed**, but may be **reweighted**
+- Highlights differences between **static reputation vs behavioral analysis**
+
+> ⚠️ Results vary across engines and over time — this is **not a bypass**, but a study of trust modeling.
+
+
 ### 🧬 Binary Mutation Testing
 
 - Signing changes binary hash → test **signature-based detection limits**
